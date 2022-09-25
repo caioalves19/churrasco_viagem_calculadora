@@ -2,6 +2,7 @@ from ordered_set import OrderedSet
 
 
 class Evento:
+    # O Evento manterá vinculados as Pessoas e as Despesas
     def __init__(self, nome) -> None:
         self.nome = nome
         self._pessoas = set()
@@ -9,16 +10,19 @@ class Evento:
 
     @property
     def total_despesas(self):
+        # Retorna o valor total das despesas do Evento
         total = 0
         for despesa in self._despesas:
             total += despesa.valor
         return total
 
     def add_pessoa(self, pessoa):
+        # Adiciona uma Pessoa ao Evento
         self._pessoas.add(pessoa)
         pessoa.eventos.add(self)
 
     def check_pessoas_cadastradas_no_evento(self, pessoas):
+        #Checa se as pessoas estão cadastradas no Evento
         if not pessoas:
             print("Lista de divisão vazia. Despesa não cadastrada!")
             return False
@@ -35,6 +39,7 @@ class Evento:
         return False
 
     def extrato_por_pessoa(self, pessoa):
+        # Exibe extrato individual, mas considera que ela pagou todas as suas despesas individualmente
         if self.check_pessoas_cadastradas_no_evento([pessoa]):
             titulo = f" Extrato {pessoa} - {self.nome} ".center(40, "*")
             itens = ""
@@ -57,6 +62,7 @@ class Evento:
             return total, total_pago
 
     def extrato_por_produto(self, produto):
+        # Gasto total por Produto no Evento
         total_por_produto = 0
         for despesa in self._despesas:
             if produto == despesa.produto:
@@ -69,6 +75,7 @@ class Evento:
         return total_por_produto
 
     def extrato_total(self):
+        # Exibe extrato total do Evento com Produto e Valor
         titulo = f" EXTRATO FINAL - {self.nome} ".upper().center(40, "*")
         itens = ""
         total = 0
@@ -82,6 +89,7 @@ class Evento:
         return total
 
     def fechar_conta(self):
+        # Exibe valores totais por pessoa e faz as contas. Mostra a conta individual, quanto essa Pessoa já pagou e quanto tem a receber/pagar
         if self._pessoas:
             titulo = f" Fechamento de conta - {self.nome} ".upper().center(60, "*")
             titulo += f"\n{'NOME':20}{'PAGO':^20}{'A PAGAR':>20}"
@@ -110,37 +118,32 @@ class Evento:
     def __str__(self) -> str:
         return f"Evento: {self.nome} - Participantes: {self._pessoas} - Valor Total: {self.total_despesas:.2f}"
 
-
 class Pessoa:
     def __init__(self, nome) -> None:
         self.nome = nome
         self.eventos = set()
 
     def add_despesa(self, despesa, evento):
+        # Cadastra uma Despesa a um Evento
         if evento.check_pessoas_cadastradas_no_evento(despesa.divisao.keys()):
             evento._despesas.add(despesa)
             return True
         return False
 
     def extrato_por_evento(self, evento):
+        # Exibe extrato individual, mas considera que ela pagou todas as suas despesas individualmente
         evento.extrato_por_pessoa(self)
         return True
 
     def extrato_total(self):
+        # Exibe extrato individual de todos os Eventos que participa, mas considera que ela já pagou todas as suas despesas
         total_geral = 0
         for evento in self.eventos:
             total_geral += evento.extrato_por_pessoa(self)[0]
         print(f"{'-'*40}\n{'TOTAL GERAL: ':20}{total_geral:>20.2f}")
 
-    # def eventos(self):
-    #     eventos = []
-    #     for evento in self.eventos:
-    #         eventos.append(evento.nome)
-    #     return eventos
-
     def __repr__(self) -> str:
         return self.nome
-
 
 class Despesa:
     def __init__(self, produto, divisao) -> None:
@@ -148,16 +151,17 @@ class Despesa:
         self.divisao = divisao
 
     @property
+    #Valor total da despesa
     def valor(self):
         return sum(self.divisao.values())
 
     @property
+    # Valor total dividido pelo número de Pessoas vinculadas
     def valor_individual(self):
-        return sum(self.divisao.values()) / len(self.divisao)
+        return self.valor / len(self.divisao)
 
     def __repr__(self) -> str:
         return f"{self.produto}: {self.valor}"
-
 
 class Produto:
     def __init__(self, nome) -> None:
@@ -166,8 +170,7 @@ class Produto:
     def __repr__(self) -> str:
         return self.nome
 
-
-churrasco = Evento("Churrasco")
+# churrasco = Evento("Churrasco")
 # viagem = Evento("Viagem")
 
 # carne = Produto("Carne")
@@ -193,4 +196,4 @@ churrasco = Evento("Churrasco")
 # caio.add_despesa(Despesa(carvao, {caio: 0, lezao: 10, rafa: 0}), churrasco)
 
 # viagem.fechar_conta()
-churrasco.fechar_conta()
+# churrasco.fechar_conta()
