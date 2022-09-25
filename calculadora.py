@@ -82,24 +82,27 @@ class Evento:
         return total
 
     def fechar_conta(self):
-        titulo = f" Fechamento de conta - {self.nome} ".upper().center(60, "*")
-        titulo += f"\n{'NOME':20}{'PAGO':^20}{'A PAGAR':>20}"
-        itens = ""
-        pessoas_inativas = []
-        for pessoa in self._pessoas:
-            total_individual, total_individual_pago = self.extrato_por_pessoa(pessoa)
-            if total_individual == 0:
-                pessoas_inativas.append(pessoa)
-            itens += f"\n{pessoa.nome:20}{total_individual_pago:>12.2f}{total_individual-total_individual_pago:>28.2f}"
+        if self._pessoas:
+            titulo = f" Fechamento de conta - {self.nome} ".upper().center(60, "*")
+            titulo += f"\n{'NOME':20}{'PAGO':^20}{'A PAGAR':>20}"
+            itens = ""
+            pessoas_inativas = []
+            for pessoa in self._pessoas:
+                total_individual, total_individual_pago = self.extrato_por_pessoa(pessoa)
+                if total_individual == 0:
+                    pessoas_inativas.append(pessoa)
+                itens += f"\n{pessoa.nome:20}{total_individual_pago:>12.2f}{total_individual-total_individual_pago:>28.2f}"
 
-        for pessoa_inativa in pessoas_inativas:
-            self._pessoas.remove(pessoa)
+            for pessoa_inativa in pessoas_inativas:
+                self._pessoas.remove(pessoa)
 
-        itens += f"\n{'*'*60}\n{'TOTAL:':20}{self.total_despesas:>12.2f}"
-        itens += (
-            f"\n{'MÉDIA INDIVIDUAL:':20}{self.total_despesas/len(self._pessoas):>12.2f}"
-        )
-        print(f"\n{titulo}{itens}")
+            itens += f"\n{'*'*60}\n{'TOTAL:':20}{self.total_despesas:>12.2f}"
+            itens += (
+                f"\n{'MÉDIA INDIVIDUAL:':20}{self.total_despesas/len(self._pessoas):>12.2f}"
+            )
+            print(f"\n{titulo}{itens}")
+            return True
+        print("O evento não possui pessoas nem despesas")
 
     def __repr__(self) -> str:
         return self.nome
@@ -165,29 +168,29 @@ class Produto:
 
 
 churrasco = Evento("Churrasco")
-viagem = Evento("Viagem")
+# viagem = Evento("Viagem")
 
-carne = Produto("Carne")
-carvao = Produto("Carvão")
+# carne = Produto("Carne")
+# carvao = Produto("Carvão")
 
-caio = Pessoa("Caio")
-rafa = Pessoa("Rafael")
-lezao = Pessoa("Lezão")
+# caio = Pessoa("Caio")
+# rafa = Pessoa("Rafael")
+# lezao = Pessoa("Lezão")
 
 
-churrasco.add_pessoa(caio)
-churrasco.add_pessoa(lezao)
-churrasco.add_pessoa(rafa)
+# churrasco.add_pessoa(caio)
+# churrasco.add_pessoa(lezao)
+# churrasco.add_pessoa(rafa)
 
-viagem.add_pessoa(caio)
-viagem.add_pessoa(lezao)
+# viagem.add_pessoa(caio)
+# viagem.add_pessoa(lezao)
 
-caio.add_despesa(Despesa(carne, {caio: 30}), viagem)
-caio.add_despesa(Despesa(carvao, {caio: 15, lezao: 10}), viagem)
+# caio.add_despesa(Despesa(carne, {caio: 30}), viagem)
+# caio.add_despesa(Despesa(carvao, {caio: 15, lezao: 10}), viagem)
 
-caio.add_despesa(Despesa(carne, {caio: 30, lezao: 0}), churrasco)
-caio.add_despesa(Despesa(carne, {caio: 100}), churrasco)
-caio.add_despesa(Despesa(carvao, {caio: 0, lezao: 10, rafa: 0}), churrasco)
+# caio.add_despesa(Despesa(carne, {caio: 30, lezao: 0}), churrasco)
+# caio.add_despesa(Despesa(carne, {caio: 100}), churrasco)
+# caio.add_despesa(Despesa(carvao, {caio: 0, lezao: 10, rafa: 0}), churrasco)
 
-viagem.fechar_conta()
+# viagem.fechar_conta()
 churrasco.fechar_conta()
