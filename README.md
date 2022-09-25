@@ -60,4 +60,4 @@ As Despesas deste exemplo foram as seguintes:
 
 Caio, por exemplo, está vinculado às três Despesas. Na 1, o total (30) foi dividido por 2 (15). Na segunda, a despesa foi apenas dele, então soma-se 100 (115). Na terceira, foi dividida entre três, então soma-se 3,33 (118,33). Entretanto, ele desembolsou 130, por isso o fechar_conta() exibiu -11,67 (Caio precisa receber esse valor), que virá de Lezão e Rafael.
 
-[⬆ Voltar ao topo](repository.md#churrasco_viagem_calculadora)<br>
+[⬆ Voltar ao topo](#churrasco_viagem_calculadora)<br>
