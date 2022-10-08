@@ -91,22 +91,19 @@ class Evento:
         # Exibe valores totais por pessoa e faz as contas. Mostra a conta individual, quanto essa Pessoa já pagou e quanto tem a receber/pagar
         if self._pessoas:
             titulo = f" Fechamento de conta - {self.nome} ".upper().center(60, "*")
-            titulo += f"\n{'NOME':20}{'PAGO':^20}{'A PAGAR':>20}"
+            titulo += f"\n{'NOME':15}{'TOTAL':^15}{'PAGO':^15}{'A PAGAR':>15}"
             itens = ""
             pessoas_inativas = []
             for pessoa in self._pessoas:
                 total_individual, total_individual_pago = self.extrato_por_pessoa(pessoa)
                 if total_individual == 0:
                     pessoas_inativas.append(pessoa)
-                itens += f"\n{pessoa.nome:20}{total_individual_pago:>12.2f}{total_individual-total_individual_pago:>28.2f}"
+                itens += f"\n{pessoa.nome:15}{total_individual:>10.2f}{total_individual_pago:>14.2f}{total_individual-total_individual_pago:>21.2f}"
 
             for pessoa_inativa in pessoas_inativas:
                 self._pessoas.remove(pessoa)
 
-            itens += f"\n{'*'*60}\n{'TOTAL:':20}{self.total_despesas:>12.2f}"
-            itens += (
-                f"\n{'MÉDIA INDIVIDUAL:':20}{self.total_despesas/len(self._pessoas):>12.2f}"
-            )
+            itens += f"\n{'*'*60}\n{'TOTAL:':13}{self.total_despesas:>12.2f}"
             print(f"\n{titulo}{itens}")
             return True
         print("O evento não possui pessoas nem despesas")
